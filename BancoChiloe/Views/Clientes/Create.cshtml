@@ -1,0 +1,95 @@
+﻿@model BancoChiloe.Models.Cliente
+
+@{
+    ViewData["Title"] = "Nuevo Cliente";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Rut" class="control-label"></label>
+                <input asp-for="Rut" class="form-control" id="txt_rut" onblur="Validar();" placeholder="Ej: 76161082-1" />
+                <span asp-validation-for="Rut" class="text-danger"></span>
+                <p class="text-info" id="msgerror"></p>
+            </div>
+            <div class="form-group">
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Apellidos" class="control-label"></label>
+                <input asp-for="Apellidos" class="form-control" />
+                <span asp-validation-for="Apellidos" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaNacimiento" class="control-label"></label>
+                <input asp-for="FechaNacimiento" class="form-control" type="date" />
+                <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Direccion" class="control-label"></label>
+                <input asp-for="Direccion" class="form-control" />
+                <span asp-validation-for="Direccion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Telefono" class="control-label"></label>
+                <input asp-for="Telefono" class="form-control" />
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-outline-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Volver a lista de clientes</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+
+    @if (!string.IsNullOrEmpty(ViewBag.server))
+    {
+        <script type="text/javascript">
+              Swal.fire("¡Información!", '@ViewBag.server', "info");
+        </script>
+    }
+    <script>
+        var Fn = {
+
+            validaRut: function (rutCompleto) {
+                if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(rutCompleto))
+                    return false;
+                var tmp = rutCompleto.split('-');
+                var digv = tmp[1];
+                var rut = tmp[0];
+                if (digv == 'K') digv = 'k';
+                return (Fn.dv(rut) == digv);
+            },
+            dv: function (T) {
+                var M = 0, S = 1;
+                for (; T; T = Math.floor(T / 10))
+                    S = (S + T % 10 * (9 - M++ % 6)) % 11;
+                return S ? S - 1 : 'k';
+            }
+        }
+
+        function Validar() {
+            if (Fn.validaRut($("#txt_rut").val())) {
+            } else {
+                $("#msgerror").html("El Rut no es válido");
+                document.getElementById('txt_rut').value = "";
+            }
+        }
+    </script>
+}

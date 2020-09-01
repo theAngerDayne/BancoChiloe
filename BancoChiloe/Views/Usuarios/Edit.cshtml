@@ -1,0 +1,50 @@
+﻿@model BancoChiloe.Models.AppUser
+
+
+@{
+    ViewData["Title"] = "Editar Usuario";
+}
+
+<div class="container">
+
+    <h3> @ViewData["Title"]</h3>
+
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="@Model.Email"></label>
+            <input asp-for="@Model.Email" class="form-control" type="email" />
+            <span asp-validation-for="@Model.Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="@Model.AuxPass"></label>
+            <input autocomplete="off" type="password" asp-for="@Model.AuxPass" class="form-control" />
+            <span asp-validation-for="@Model.AuxPass" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.ConfPass"></label>
+            <input autocomplete="off" type="password" asp-for="@Model.ConfPass" class="form-control" />
+            <span asp-validation-for="@Model.ConfPass" class="text-danger"></span>
+        </div>
+
+        <br />
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-outline-success">Editar</button>
+            <a class="btn btn-outline-warning" asp-action="Index">Volver</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+
+    @if (!string.IsNullOrEmpty(ViewBag.server))
+    {
+        <script type="text/javascript">
+              Swal.fire("¡Información!", '@ViewBag.server', "error");
+        </script>
+    }
+}
