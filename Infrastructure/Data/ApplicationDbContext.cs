@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using BancoChiloe.Models;
+using Core;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace BancoChiloe.Data
+namespace Infrastructure.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

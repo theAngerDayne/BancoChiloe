@@ -8,35 +8,34 @@ using Microsoft.EntityFrameworkCore;
 using BancoChiloe.Data;
 using BancoChiloe.Models;
 using Microsoft.AspNetCore.Authorization;
+using Infrastructure.Data;
+using Infrastructure.Services.Clientes;
+using Core;
 
 namespace BancoChiloe.Controllers
 {
     [Authorize]
     public class ClientesController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly ClientesService _clientesService;
 
-        public ClientesController(ApplicationDbContext db)
+        public ClientesController(ClientesService clientesService)
         {
-            _db = db;
+            _clientesService = clientesService;
         }
 
         // GET: Clientes
         public async Task<IActionResult> Index()
         {
-            return View(await _db.Clientes.ToListAsync());
+            return View(await _clientesService.GetClientes());
         }
 
         // GET: Clientes/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        public async Task<IActionResult> Details(int id)
+        {          
 
-            var cliente = await _db.Clientes
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var cliente = await _clientesService.GetClienteById(id);
+
             if (cliente == null)
             {
                 return NotFound();
@@ -64,23 +63,7 @@ namespace BancoChiloe.Controllers
                     return View();
                 }
 
-                /*Validacion rut unico*/
-                var clienteFromdb = await _db.Clientes.Where(r => r.Rut == cliente.Rut.ToUpper().Trim()).FirstOrDefaultAsync();
-
-                if (clienteFromdb != null)
-                {
-                    ViewBag.server = "¡El RUT ya se encuentra en la base de datos!";
-                    return View();
-                }
-
-                /*Para que sea vea mas bonita la info, no?*/
-                cliente.Rut.ToUpper();
-                cliente.Nombre.ToUpper();
-                cliente.Direccion.ToUpper();
-                cliente.Apellidos.ToUpper(); //Se podria hacer una funcion para concatenar... pero el doc no lo pide =)
-
-                _db.Add(cliente);
-                await _db.SaveChangesAsync();                
+                          
 
                 return RedirectToAction("Index", "Clientes", new { recepcion = "Cliente creado con éxito." });
             }

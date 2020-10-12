@@ -15,6 +15,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Oracle.ManagedDataAccess.Client;
 using System.Globalization;
+using Infrastructure.Data;
+using Infrastructure.Services.Clientes;
 
 namespace BancoChiloe
 {
@@ -47,6 +49,9 @@ namespace BancoChiloe
 
             services.AddHttpContextAccessor();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+
+            services.AddScoped<IClientes, ClientesService>();
         }
 
         
