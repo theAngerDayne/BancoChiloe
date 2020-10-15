@@ -32,7 +32,7 @@ namespace API
            //    services.AddDbContext<ApplicationDbContext>(options =>
              //   options.UseOracle(
                //     Configuration.GetConnectionString("OracleConnection")));
-            //services.AddDbContext<ApplicationDbContext>(x => x.UseSqlite(Configuration.GetConnectionString("SqliteConnection")));
+              // services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("SqliteConnection")));
 
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();

@@ -12,8 +12,9 @@ namespace API.Services.ClienteService
         Task<ServiceResponse<GetClienteDto>> UpdateCharacter(UpdateClienteDto updatedCliente);
         Task<ServiceResponse<List<GetClienteDto>>> DeleteCliente(int id);
 
-        //buscar cliente por id
-        //metodo que busque un listado de clientes en base a un nombre
-        //metodo q entregue la cantidad de clientes en el sistema
+        Task<ServiceResponse<GetClienteDto>> GetClienteById(int id);
+        Task<ServiceResponse<List<GetClienteDto>>> GetClientesByName(string nombre);
+        Task<ServiceResponse<int>> GetCantidadClientes();
+
     }
 }
