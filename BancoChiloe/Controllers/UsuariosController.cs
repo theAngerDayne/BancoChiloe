@@ -163,7 +163,7 @@ namespace BancoChiloe.Controllers
 
             var curUserFromdb = _db.AppUsers.Where(u => u.Id == currentUser).FirstOrDefault();
             _db.Remove(usuario);
-           await _db.SaveChangesAsync();
+           // await _db.SaveChangesAsync();
 
             if(usuario.Email == curUserFromdb.Email)
                 await _signInManager.SignOutAsync();
