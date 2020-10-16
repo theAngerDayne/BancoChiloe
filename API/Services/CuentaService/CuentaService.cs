@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,6 +34,34 @@ namespace API.Services.CuentaService
             return serviceResponse;
         }
 
+        public async Task<ServiceResponse<List<GetCuentaDto>>> DesactivarCuenta(int id)
+        {
+            ServiceResponse<List<GetCuentaDto>> serviceResponse = new ServiceResponse<List<GetCuentaDto>>();
+            try
+            {
+                var cuenta = await _context.Cuentas.FirstOrDefaultAsync(c => c.Id == id);
+
+                if(cuenta != null)
+                {
+                    cuenta.IsActive = false;
+                    _context.Cuentas.Update(cuenta);
+                    await _context.SaveChangesAsync();
+                    serviceResponse.Data = (_context.Cuentas.Select(c => _mapper.Map<GetCuentaDto>(c))).ToList();
+                }
+                else
+                {
+                    serviceResponse.Message = "Cuenta no encontrada";
+                    serviceResponse.Success = false;
+                }
+            }
+            catch(Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
+
         public async Task<ServiceResponse<List<GetCuentaDto>>> GetAllCuentas()
         {
             ServiceResponse<List<GetCuentaDto>> serviceResponse = new ServiceResponse<List<GetCuentaDto>>();
@@ -56,7 +85,7 @@ namespace API.Services.CuentaService
 
         public async Task<ServiceResponse<List<GetCuentaDto>>> GetCuentasByIdCliente(int idCliente)
         {
-             ServiceResponse<List<GetCuentaDto>> serviceResponse = new ServiceResponse<List<GetCuentaDto>>();
+            ServiceResponse<List<GetCuentaDto>> serviceResponse = new ServiceResponse<List<GetCuentaDto>>();
 
             List<Cuenta> dbCuentas = await _context.Cuentas.Include(c => c.Cliente)
             .Where(i => i.Cliente.Id == idCliente).ToListAsync();
@@ -79,7 +108,30 @@ namespace API.Services.CuentaService
 
         public async Task<ServiceResponse<GetCuentaDto>> UpdateCuenta(UpdateCuentaDto updatedCuenta)
         {
-            throw new System.NotImplementedException();
+            ServiceResponse<GetCuentaDto> serviceResponse = new ServiceResponse<GetCuentaDto>();
+            try
+            {
+                Cuenta cuenta = await _context.Cuentas.Include(c => c.Cliente)
+                .FirstOrDefaultAsync(c => c.Id == updatedCuenta.Id);
+
+                cuenta.TipoCuenta = (BancoChiloe.Models.TipoCuenta)updatedCuenta.TipoCuenta;
+                cuenta.FechaApertura = updatedCuenta.FechaApertura;
+                cuenta.NombreUsuario = updatedCuenta.NombreUsuario;
+                cuenta.Saldo = updatedCuenta.Saldo;
+                cuenta.SaldoInicial = updatedCuenta.SaldoInicial;
+
+                _context.Cuentas.Update(cuenta);
+                await _context.SaveChangesAsync();
+                serviceResponse.Data = _mapper.Map<GetCuentaDto>(cuenta);
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+
+            return serviceResponse;
+
         }
     }
 }

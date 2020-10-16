@@ -5,6 +5,7 @@ namespace API.Dtos.Cuenta
 {
     public class UpdateCuentaDto
     {
+        public int Id { get; set; }
         public TipoCuenta TipoCuenta { get; set; } = TipoCuenta.VISTA;
         public DateTime FechaApertura { get; set; }
         public decimal SaldoInicial { get; set; } = 0;

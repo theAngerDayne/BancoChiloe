@@ -18,10 +18,8 @@ namespace API.Services.CuentaService
         Task<ServiceResponse<List<GetCuentaDto>>> AddCuenta(AddCuentaDto newCuenta);
 
         Task<ServiceResponse<GetCuentaDto>> UpdateCuenta(UpdateCuentaDto updatedCuenta);
-        /*
-        
-        modificar
-        desactivar
-        */
+        Task<ServiceResponse<List<GetCuentaDto>>> DesactivarCuenta(int id);
+
+
     }
 }
