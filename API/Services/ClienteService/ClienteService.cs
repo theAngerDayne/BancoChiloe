@@ -110,9 +110,35 @@ namespace API.Services.ClienteService
 
         }
 
-        public Task<ServiceResponse<GetClienteDto>> UpdateCharacter(UpdateClienteDto updatedCliente)
+        public async Task<ServiceResponse<GetClienteDto>> UpdateCharacter(UpdateClienteDto updatedCliente)
         {
-            throw new System.NotImplementedException();
+            ServiceResponse<GetClienteDto> serviceResponse = new ServiceResponse<GetClienteDto>();
+            
+            try
+            {
+                Cliente cliente = await _context.Clientes.FirstOrDefaultAsync(c => c.Id == updatedCliente.Id);
+
+                cliente.Rut = updatedCliente.Rut;
+                cliente.Nombre = updatedCliente.Nombre;
+                cliente.Apellidos = updatedCliente.Apellidos;
+                cliente.FechaNacimiento = updatedCliente.FechaNacimiento;
+                cliente.Direccion = updatedCliente.Direccion;
+                cliente.Telefono = updatedCliente.Telefono;
+
+                _context.Clientes.Update(cliente);
+                await _context.SaveChangesAsync();
+
+                serviceResponse.Data = _mapper.Map<GetClienteDto>(cliente);
+
+
+            }
+            catch(Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            
+            return serviceResponse;
         }
 
 

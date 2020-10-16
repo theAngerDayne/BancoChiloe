@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Services.ClienteService;
+using API.Services.CuentaService;
 using AutoMapper;
 using BancoChiloe.Data;
 using Microsoft.AspNetCore.Builder;
@@ -38,6 +39,7 @@ namespace API
             services.AddControllers();
 
             services.AddScoped<IClienteService,ClienteService>();
+            services.AddScoped<ICuentaService, CuentaService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
